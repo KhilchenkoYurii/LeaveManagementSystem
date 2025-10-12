@@ -15,7 +15,10 @@ namespace LeaveManagementSystem.Web.MappingProfiles
                .ForMember(dest => dest.NumberOfDays, opt => opt.MapFrom(src => src.Days));
 
             CreateMap<LeaveTypeEditVM, LeaveType>()
-                .ForMember(dest => dest.NumberOfDays, opt => opt.MapFrom(src => src.Days)).ReverseMap();
+                .ForMember(dest => dest.NumberOfDays, opt => opt.MapFrom(src => src.Days));
+
+            CreateMap<LeaveType, LeaveTypeEditVM>()
+                .ForMember(dest => dest.Days, opt => opt.MapFrom(src => src.NumberOfDays));
         }
     }
 }
