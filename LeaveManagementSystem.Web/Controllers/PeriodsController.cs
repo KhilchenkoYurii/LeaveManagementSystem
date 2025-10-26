@@ -1,25 +1,26 @@
-﻿using LeaveManagementSystem.Web.Models.LeaveTypes;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize(Roles = GlobalConsts.AdminRoleName)]
-    public class LeaveTypesController(ILeaveTypesService _leaveTypesService) : Controller
+    public class PeriodsController : Controller
     {
-        private const string NameExistValidationError = "Name is already exist";
+        private readonly ApplicationDbContext _context;
 
-        // GET: LeaveTypes
-        public async Task<IActionResult> Index()
+        public PeriodsController(ApplicationDbContext context)
         {
-            var viewData = await _leaveTypesService.GetAll();
-
-            return View(viewData);
+            _context = context;
         }
 
-        // GET: LeaveTypes/Details/5
+        // GET: Periods
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Periods.ToListAsync());
+        }
+
+        // GET: Periods/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -27,45 +28,39 @@ namespace LeaveManagementSystem.Web.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _leaveTypesService.Get<LeaveTypeReadonlyVM>(id.Value);
-
-            if (leaveType == null)
+            var period = await _context.Periods
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (period == null)
             {
                 return NotFound();
             }
 
-            return View(leaveType);
+            return View(period);
         }
 
-        // GET: LeaveTypes/Create
+        // GET: Periods/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: LeaveTypes/Create
+        // POST: Periods/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LeaveTypeCreateVM leaveTypeCreateVM)
+        public async Task<IActionResult> Create([Bind("Name,StartDate,EndDate,Id")] Period period)
         {
-            //Add custom validation
-            if (await _leaveTypesService.CheckIfLeaveTypeNameExists(leaveTypeCreateVM.Name))
-            {
-                ModelState.AddModelError(nameof(leaveTypeCreateVM.Name), NameExistValidationError);
-            }
-
             if (ModelState.IsValid)
             {
-                await _leaveTypesService.Create(leaveTypeCreateVM);
-
+                _context.Add(period);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveTypeCreateVM);
+            return View(period);
         }
 
-        // GET: LeaveTypes/Edit/5
+        // GET: Periods/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,43 +68,36 @@ namespace LeaveManagementSystem.Web.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _leaveTypesService.Get<LeaveTypeEditVM>(id.Value);
-
-            if (leaveType == null)
+            var period = await _context.Periods.FindAsync(id);
+            if (period == null)
             {
                 return NotFound();
             }
-
-            return View(leaveType);
+            return View(period);
         }
 
-        // POST: LeaveTypes/Edit/5
+        // POST: Periods/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, LeaveTypeEditVM leaveTypeVM)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,StartDate,EndDate,Id")] Period period)
         {
-            if (id != leaveTypeVM.Id)
+            if (id != period.Id)
             {
                 return NotFound();
-            }
-
-            //Add custom validation
-            if (await _leaveTypesService.CheckIfLeaveTypeNameExistsForEdit(leaveTypeVM))
-            {
-                ModelState.AddModelError(nameof(leaveTypeVM.Name), NameExistValidationError);
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _leaveTypesService.Edit(leaveTypeVM);
+                    _context.Update(period);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_leaveTypesService.LeaveTypeExists(leaveTypeVM.Id))
+                    if (!PeriodExists(period.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +108,10 @@ namespace LeaveManagementSystem.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveTypeVM);
+            return View(period);
         }
 
-        // GET: LeaveTypes/Delete/5
+        // GET: Periods/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,24 +119,34 @@ namespace LeaveManagementSystem.Web.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _leaveTypesService.Get<LeaveTypeReadonlyVM>(id.Value);
-
-            if (leaveType == null)
+            var period = await _context.Periods
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (period == null)
             {
                 return NotFound();
             }
 
-            return View(leaveType);
+            return View(period);
         }
 
-        // POST: LeaveTypes/Delete/5
+        // POST: Periods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _leaveTypesService.Remove(id);
+            var period = await _context.Periods.FindAsync(id);
+            if (period != null)
+            {
+                _context.Periods.Remove(period);
+            }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool PeriodExists(int id)
+        {
+            return _context.Periods.Any(e => e.Id == id);
         }
     }
 }
