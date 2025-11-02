@@ -4,6 +4,7 @@ using LeaveManagementSystem.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaveManagementSystem.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251101142429_addLeaveRequestTable")]
+    partial class addLeaveRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,7 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                         {
                             Id = "a9193084-ff28-4cb2-be55-f0310bad461c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a62f48df-289b-4666-a3bf-2205d0cb8ed0",
+                            ConcurrencyStamp = "d14537a4-b01e-40ee-816b-2fddb0998edc",
                             DateOfBirth = new DateOnly(1970, 1, 23),
                             Email = "admin@localhos.com",
                             EmailConfirmed = true,
@@ -111,9 +114,9 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOS.COM",
                             NormalizedUserName = "ADMIN@LOCALHOS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPxw9bFeQcyeGtXdiH0VdeQ610w9hIYHqxFzzGu36slSkxvwvrUW9+XBD4XZPkBN1A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEATiH1YBbG6KH9Niq7wczi2l+pc/erd4D+6yPG2SNbr2o12BrKwrlmrX3hQdZLuChw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b9f5dc39-2973-47dd-b4ca-74e38d3c5405",
+                            SecurityStamp = "041de0e3-c3d3-4894-8541-f5d9eac632a2",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhos.com"
                         });
@@ -166,7 +169,10 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("LeaveRequestStatusId")
+                    b.Property<int>("LeaveRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeaveRequestStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("LeaveTypeId")
@@ -478,9 +484,7 @@ namespace LeaveManagementSystem.Web.Data.Migrations
 
                     b.HasOne("LeaveManagementSystem.Web.Data.LeaveRequestStatus", "LeaveRequestStatus")
                         .WithMany()
-                        .HasForeignKey("LeaveRequestStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LeaveRequestStatusId");
 
                     b.HasOne("LeaveManagementSystem.Web.Data.LeaveType", "LeaveType")
                         .WithMany()

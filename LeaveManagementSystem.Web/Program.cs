@@ -1,7 +1,9 @@
-using LeaveManagementSystem.Web.Data;
 using LeaveManagementSystem.Web.Services.Email;
 using LeaveManagementSystem.Web.Services.LeaveAllocations;
+using LeaveManagementSystem.Web.Services.LeaveRequests;
 using LeaveManagementSystem.Web.Services.LeaveTypes;
+using LeaveManagementSystem.Web.Services.Period;
+using LeaveManagementSystem.Web.Services.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +22,18 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ILeaveTypesService, LeaveTypesService>();
 builder.Services.AddScoped<ILeaveAllocationsService, LeaveAllocationsService>();
+builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
+builder.Services.AddScoped<IPeriodService, PeriodService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(GlobalConsts.AdminSupervisorOnlyPolicy, policy =>
+    {
+        policy.RequireRole(GlobalConsts.AdminRoleName, GlobalConsts.SupervisorRoleName);
+    });
+});
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
