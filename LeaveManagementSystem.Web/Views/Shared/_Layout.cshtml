@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using LeaveManagementSystem.Common.Static
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,7 +27,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.IsInRole(GlobalConsts.AdminRoleName))
+                        @if (User.IsInRole(Roles.AdminRoleName))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

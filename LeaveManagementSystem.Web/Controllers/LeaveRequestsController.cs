@@ -1,6 +1,7 @@
-﻿using LeaveManagementSystem.Web.Models.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
+﻿using LeaveManagementSystem.Common.Static;
+using LeaveManagementSystem.Application.Models.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -66,7 +67,7 @@ namespace LeaveManagementSystem.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Policy = GlobalConsts.AdminSupervisorOnlyPolicy)]
+        [Authorize(Policy = Roles.AdminSupervisorOnlyPolicy)]
         public async Task<IActionResult> ListRequests(int create)
         {
             var leaveRequests = await _leaveRequestsService.AdminGetAllLeaveRequests();
@@ -74,7 +75,7 @@ namespace LeaveManagementSystem.Web.Controllers
             return View(leaveRequests);
         }
 
-        [Authorize(Policy = GlobalConsts.AdminSupervisorOnlyPolicy)]
+        [Authorize(Policy = Roles.AdminSupervisorOnlyPolicy)]
         public async Task<IActionResult> Review(int id)
         {
             var model = await _leaveRequestsService.GetLeaveRequestForReview(id);

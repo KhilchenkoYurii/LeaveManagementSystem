@@ -1,8 +1,9 @@
-﻿@model EmployeeAllocationVM
+﻿@using LeaveManagementSystem.Common.Static
+@model EmployeeAllocationVM
 @{
     ViewData["Title"] = "View Allocations";
-    var isAdmin = User.IsInRole(GlobalConsts.AdminRoleName);
-    var isEmployee = User.IsInRole(GlobalConsts.EmployeeRoleName);
+    var isAdmin = User.IsInRole(Roles.AdminRoleName);
+    var isEmployee = User.IsInRole(Roles.EmployeeRoleName);
     string message = isAdmin ? "There are no allocations" : "You have no allocations. Please contact your Administrator.";
 }
 

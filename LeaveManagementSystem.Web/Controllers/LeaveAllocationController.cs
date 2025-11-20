@@ -1,6 +1,7 @@
-﻿using LeaveManagementSystem.Web.Models.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
+﻿using LeaveManagementSystem.Common.Static;
+using LeaveManagementSystem.Application.Models.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ namespace LeaveManagementSystem.Web.Controllers
     public class LeaveAllocationController(ILeaveAllocationsService _leaveAllocationsService, 
         ILeaveTypesService _leaveTypesService) : Controller
     {
-        [Authorize(Roles = GlobalConsts.AdminRoleName)]
+        [Authorize(Roles = Roles.AdminRoleName)]
         public async Task<IActionResult> Index()
         {
             var leaveAllocationVM = await _leaveAllocationsService.GetEmployees();
@@ -18,7 +19,7 @@ namespace LeaveManagementSystem.Web.Controllers
             return View(leaveAllocationVM);
         }
 
-        [Authorize(Roles = GlobalConsts.AdminRoleName)]
+        [Authorize(Roles = Roles.AdminRoleName)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AllocateLeave(string? id)

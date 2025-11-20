@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LeaveManagementSystem.Common.Static;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
-    [Authorize(Roles = GlobalConsts.AdminRoleName)]
+    [Authorize(Roles = Roles.AdminRoleName)]
     public class PeriodsController : Controller
     {
         private readonly ApplicationDbContext _context;

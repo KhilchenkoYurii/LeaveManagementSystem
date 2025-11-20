@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
+using LeaveManagementSystem.Common.Static;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -130,7 +131,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 
             var roles = await _roleManager.Roles
                 .Select(x => x.Name)
-                .Where(q => !q.Equals(GlobalConsts.AdminRoleName))
+                .Where(q => !q.Equals(Roles.AdminRoleName))
                 .ToArrayAsync();
 
             RoleNames = roles;
@@ -159,13 +160,13 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 
                     await _userManager.AddToRoleAsync(user, Input.RoleName);
 
-                    if (Input.RoleName.Equals(GlobalConsts.SupervisorRoleName))
+                    if (Input.RoleName.Equals(Roles.SupervisorRoleName))
                     {
-                        await _userManager.AddToRolesAsync(user, [GlobalConsts.EmployeeRoleName, GlobalConsts.SupervisorRoleName]);
+                        await _userManager.AddToRolesAsync(user, [Roles.EmployeeRoleName, Roles.SupervisorRoleName]);
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, GlobalConsts.EmployeeRoleName);
+                        await _userManager.AddToRoleAsync(user, Roles.EmployeeRoleName);
                     }
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -201,7 +202,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
             }
             var roles = await _roleManager.Roles
                 .Select(x => x.Name)
-                .Where(q => !q.Equals(GlobalConsts.AdminRoleName))
+                .Where(q => !q.Equals(Roles.AdminRoleName))
                 .ToArrayAsync();
 
             RoleNames = roles;

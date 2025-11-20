@@ -1,9 +1,10 @@
-using LeaveManagementSystem.Web.Services.Email;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using LeaveManagementSystem.Web.Services.Period;
-using LeaveManagementSystem.Web.Services.User;
+using LeaveManagementSystem.Application.Services.Email;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
+using LeaveManagementSystem.Application.Services.Period;
+using LeaveManagementSystem.Application.Services.User;
+using LeaveManagementSystem.Common.Static;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,9 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(GlobalConsts.AdminSupervisorOnlyPolicy, policy =>
+    options.AddPolicy(Roles.AdminSupervisorOnlyPolicy, policy =>
     {
-        policy.RequireRole(GlobalConsts.AdminRoleName, GlobalConsts.SupervisorRoleName);
+        policy.RequireRole(Roles.AdminRoleName, Roles.SupervisorRoleName);
     });
 });
 

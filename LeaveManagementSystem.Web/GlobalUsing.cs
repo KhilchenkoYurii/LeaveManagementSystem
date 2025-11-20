@@ -1,1 +1,2 @@
-﻿global using LeaveManagementSystem.Web.Data;
+﻿global using LeaveManagementSystem.Data;
+global using LeaveManagementSystem.Application;
