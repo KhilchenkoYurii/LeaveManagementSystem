@@ -1,16 +1,15 @@
 ﻿
 using AutoMapper;
-using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Application.Models.LeaveAllocations;
 using LeaveManagementSystem.Application.Services.Period;
 using LeaveManagementSystem.Application.Services.User;
-using Microsoft.AspNetCore.Identity;
+using LeaveManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Application.Services.LeaveAllocations
 {
-    public class LeaveAllocationsService(ApplicationDbContext _applicationDb, 
-        IMapper _mapper, 
+    public class LeaveAllocationsService(ApplicationDbContext _applicationDb,
+        IMapper _mapper,
         IPeriodService _periodService,
         IUserService _userService) : ILeaveAllocationsService
     {
@@ -67,8 +66,8 @@ namespace LeaveManagementSystem.Application.Services.LeaveAllocations
             var currentDate = DateTime.Now;
 
             var leaveAllocations = await _applicationDb.LeaveAllocations
-                .Include(x=> x.LeaveType)
-                .Include(x=> x.Period)
+                .Include(x => x.LeaveType)
+                .Include(x => x.Period)
                 .Where(x => x.EmployeeId == employeeId && x.Period.EndDate.Year == currentDate.Year)
                 .ToListAsync();
 
@@ -83,7 +82,7 @@ namespace LeaveManagementSystem.Application.Services.LeaveAllocations
 
             var allocations = await GetAllocations(userId);
 
-            var allocationsVmList = _mapper.Map<List<LeaveAllocation>,List<LeaveAllocationVM>>(allocations);
+            var allocationsVmList = _mapper.Map<List<LeaveAllocation>, List<LeaveAllocationVM>>(allocations);
 
             var leaveTypesCount = await _applicationDb.LeaveTypes.CountAsync();
 
@@ -112,9 +111,9 @@ namespace LeaveManagementSystem.Application.Services.LeaveAllocations
         public async Task<LeaveAllocationEditVM> GetEmployeeAllocations(int? allocationId)
         {
             var allocations = await _applicationDb.LeaveAllocations
-                .Include(x=>x.LeaveType)
-                .Include(x=>x.Employee)
-                .FirstOrDefaultAsync(x=>x.Id == allocationId);
+                .Include(x => x.LeaveType)
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.Id == allocationId);
 
             var model = _mapper.Map<LeaveAllocationEditVM>(allocations);
 
@@ -137,8 +136,8 @@ namespace LeaveManagementSystem.Application.Services.LeaveAllocations
             // option 3 await _applicationDb.SaveChangesAsync();
 
             await _applicationDb.LeaveAllocations
-                .Where(x => x.Id ==  allocationEditVM.Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(x=>x.Days, allocationEditVM.Days));
+                .Where(x => x.Id == allocationEditVM.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(x => x.Days, allocationEditVM.Days));
         }
 
         public async Task<LeaveAllocation> GetCurrentAllocation(int leaveTypeId, string employeeId)

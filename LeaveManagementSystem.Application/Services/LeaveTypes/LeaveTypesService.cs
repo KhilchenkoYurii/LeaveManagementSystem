@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Application.Models.LeaveTypes;
+using LeaveManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Application.Services.LeaveTypes
@@ -16,11 +16,11 @@ namespace LeaveManagementSystem.Application.Services.LeaveTypes
             return mappedData;
         }
 
-        public async Task<T?> Get<T>(int id)where T : class
+        public async Task<T?> Get<T>(int id) where T : class
         {
             var data = await _context.LeaveTypes.FirstOrDefaultAsync(e => e.Id.Equals(id));
 
-            if(data == null)
+            if (data == null)
             {
                 return null;
             }

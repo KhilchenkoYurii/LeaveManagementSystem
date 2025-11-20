@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using LeaveManagementSystem.Common.Static;
 using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Common.Static;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -150,7 +150,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.DateOfBirth  = Input.DateOfBirth;
+                user.DateOfBirth = Input.DateOfBirth;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

@@ -9,7 +9,7 @@ namespace LeaveManagementSystem.Application.MappingProfiles
         public LeaveTypeAutoMapperProfile()
         {
             CreateMap<LeaveType, LeaveTypeReadonlyVM>()
-                .ForMember(dest => dest.Days, opt => opt.MapFrom(src => src.NumberOfDays) );
+                .ForMember(dest => dest.Days, opt => opt.MapFrom(src => src.NumberOfDays));
 
             CreateMap<LeaveTypeCreateVM, LeaveType>()
                .ForMember(dest => dest.NumberOfDays, opt => opt.MapFrom(src => src.Days));

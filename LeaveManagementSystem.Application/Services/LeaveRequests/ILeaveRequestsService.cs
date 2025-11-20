@@ -6,8 +6,8 @@ namespace LeaveManagementSystem.Application.Services.LeaveRequests
     {
         Task CreateLeaveRequest(LeaveRequestCreateVM leaveRequestVM);
         Task<List<LeaveRequestReadOnlyVM>> GetEmployeeLeaveRequests();
-        
-        Task <EmployeeLeaveRequestListVM> AdminGetAllLeaveRequests();
+
+        Task<EmployeeLeaveRequestListVM> AdminGetAllLeaveRequests();
 
         Task CancelLeaveRequest(int leaveRequestId);
 

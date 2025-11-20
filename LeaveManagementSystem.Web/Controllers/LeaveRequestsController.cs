@@ -1,11 +1,9 @@
-﻿using LeaveManagementSystem.Common.Static;
-using LeaveManagementSystem.Application.Models.LeaveRequests;
-using LeaveManagementSystem.Application.Services.LeaveRequests;
+﻿using LeaveManagementSystem.Application.Services.LeaveRequests;
 using LeaveManagementSystem.Application.Services.LeaveTypes;
+using LeaveManagementSystem.Common.Static;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
@@ -25,12 +23,13 @@ namespace LeaveManagementSystem.Web.Controllers
 
             var leaveTypesList = new SelectList(leaveTypes, "Id", "Name", leaveTypeId);
 
-            var model = new LeaveRequestCreateVM{
+            var model = new LeaveRequestCreateVM
+            {
 
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 LeaveTypes = leaveTypesList,
-                
+
             };
 
             return View(model);

@@ -5,14 +5,13 @@ using LeaveManagementSystem.Application.Services.LeaveAllocations;
 using LeaveManagementSystem.Application.Services.Period;
 using LeaveManagementSystem.Application.Services.User;
 using LeaveManagementSystem.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Application.Services.LeaveRequests
 {
-    public class LeaveRequestsService(IMapper _mapper, 
+    public class LeaveRequestsService(IMapper _mapper,
         ILeaveAllocationsService _leaveAllocationsService,
-        ApplicationDbContext _applicationDb, 
+        ApplicationDbContext _applicationDb,
         IPeriodService _periodService,
         IUserService _userService) : ILeaveRequestsService
     {
@@ -74,9 +73,9 @@ namespace LeaveManagementSystem.Application.Services.LeaveRequests
         public async Task<List<LeaveRequestReadOnlyVM>> GetEmployeeLeaveRequests()
         {
             var user = await _userService.GetLoggedInUser();
-            
+
             var leaveRequests = await _applicationDb.LeaveRequests
-                .Include(x=> x.LeaveType)
+                .Include(x => x.LeaveType)
                 .Where(x => x.EmployeeId == user.Id)
                 .ToListAsync();
 
@@ -122,7 +121,7 @@ namespace LeaveManagementSystem.Application.Services.LeaveRequests
             var period = await _periodService.GetCurrentPeriod();
 
             var allocation = await _applicationDb.LeaveAllocations
-                .FirstAsync(x => x.LeaveTypeId == leaveRequestCreateVM.LeaveTypeId 
+                .FirstAsync(x => x.LeaveTypeId == leaveRequestCreateVM.LeaveTypeId
                 && x.EmployeeId == user.Id
                 && x.PeriodId == period.Id);
 

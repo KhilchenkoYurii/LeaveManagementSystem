@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LeaveManagementSystem.Application.Models.LeaveTypes;
 using LeaveManagementSystem.Application.Services.LeaveRequests;
 using LeaveManagementSystem.Data;
 

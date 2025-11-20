@@ -23,7 +23,7 @@ namespace LeaveManagementSystem.Application.Services.Email
 
             message.To.Add(new MailAddress(email));
 
-            using (var client = new SmtpClient(smtpServer,int.Parse(smtpPort)))
+            using (var client = new SmtpClient(smtpServer, int.Parse(smtpPort)))
             {
                 await client.SendMailAsync(message);
             }

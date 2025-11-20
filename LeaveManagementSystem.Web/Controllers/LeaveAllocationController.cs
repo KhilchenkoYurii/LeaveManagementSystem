@@ -1,14 +1,14 @@
-﻿using LeaveManagementSystem.Common.Static;
-using LeaveManagementSystem.Application.Models.LeaveAllocations;
+﻿using LeaveManagementSystem.Application.Models.LeaveAllocations;
 using LeaveManagementSystem.Application.Services.LeaveAllocations;
 using LeaveManagementSystem.Application.Services.LeaveTypes;
+using LeaveManagementSystem.Common.Static;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize]
-    public class LeaveAllocationController(ILeaveAllocationsService _leaveAllocationsService, 
+    public class LeaveAllocationController(ILeaveAllocationsService _leaveAllocationsService,
         ILeaveTypesService _leaveTypesService) : Controller
     {
         [Authorize(Roles = Roles.AdminRoleName)]
@@ -26,19 +26,19 @@ namespace LeaveManagementSystem.Web.Controllers
         {
             await _leaveAllocationsService.AllocateLeave(id);
 
-            return RedirectToAction(nameof(Details), new {userId = id});
+            return RedirectToAction(nameof(Details), new { userId = id });
         }
 
         public async Task<IActionResult> EditAllocation(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var allocations = await _leaveAllocationsService.GetEmployeeAllocations(id.Value);
 
-            if(allocations  == null)
+            if (allocations == null)
             {
                 return NotFound();
             }
@@ -50,7 +50,7 @@ namespace LeaveManagementSystem.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAllocation(LeaveAllocationEditVM allocationEditVM)
         {
-            if(await _leaveTypesService.DaysExceedMaximum(allocationEditVM.LeaveType.Id, allocationEditVM.Days))
+            if (await _leaveTypesService.DaysExceedMaximum(allocationEditVM.LeaveType.Id, allocationEditVM.Days))
             {
                 ModelState.AddModelError("Days", "Allocation exceeds the maximum leave type value!");
             }
@@ -73,7 +73,7 @@ namespace LeaveManagementSystem.Web.Controllers
 
         public async Task<IActionResult> Details(string? userId)
         {
-            var leaveAllocationVM =  await _leaveAllocationsService.GetEmployeeAllocations(userId);
+            var leaveAllocationVM = await _leaveAllocationsService.GetEmployeeAllocations(userId);
 
             return View(leaveAllocationVM);
         }
