@@ -1,32 +1,21 @@
-using LeaveManagementSystem.Application.Services.Email;
-using LeaveManagementSystem.Application.Services.LeaveAllocations;
-using LeaveManagementSystem.Application.Services.LeaveRequests;
-using LeaveManagementSystem.Application.Services.LeaveTypes;
-using LeaveManagementSystem.Application.Services.Period;
-using LeaveManagementSystem.Application.Services.User;
+using LeaveManagementSystem.Application;
 using LeaveManagementSystem.Common.Static;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+DataServicesRegistration.AddDataServices(builder.Services, builder.Configuration);
 
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+ApplicationServicesRegistration.AddApplicationServices(builder.Services);
+
+builder.Host.UseSerilog((ctx, config) => 
+    config.WriteTo.Console()
+    .ReadFrom.Configuration(ctx.Configuration)
+);
+
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddScoped<ILeaveTypesService, LeaveTypesService>();
-builder.Services.AddScoped<ILeaveAllocationsService, LeaveAllocationsService>();
-builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
-builder.Services.AddScoped<IPeriodService, PeriodService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddAuthorization(options =>
 {
